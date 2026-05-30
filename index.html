@@ -1366,6 +1366,7 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
         <span onclick="setMovieStar(1)">★</span><span onclick="setMovieStar(2)">★</span>
         <span onclick="setMovieStar(3)">★</span><span onclick="setMovieStar(4)">★</span><span onclick="setMovieStar(5)">★</span>
       </div>
+      <div class="form-group"><label>Cover Image URL (optional)</label><input type="url" id="movie-img" placeholder="https://... paste a poster image URL"></div>
     </div>
     <div class="form-group"><label>Notes / Review</label><textarea id="movie-notes" rows="3" placeholder="What did you think?"></textarea></div>
     <div class="modal-footer">
@@ -1751,7 +1752,7 @@ function navigate(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
-const labels=['overview','budget','weight','movies','recipes','highlight','todo','productivity','period','water','sleep','analytics','steps','student'];
+const labels=['overview','budget','weight','movies','recipes','highlight','todo','productivity','student','period','water','sleep','analytics','steps'];
   const items=document.querySelectorAll('.nav-item');
   const idx=labels.indexOf(page);
   if(idx>=0) items[idx].classList.add('active');
@@ -2095,6 +2096,7 @@ function renderMovies(){
   const statusBadge={'Watched':'badge-green','Watching':'badge-blue','Plan to Watch':'badge-gold','Dropped':'badge-red'};
   list.innerHTML=movies.slice().reverse().map(m=>`
     <div class="movie-card" onclick="openMovieEdit('${m.id}')">
+      ${m.img?`<img src="${m.img}" style="width:calc(100% + 28px);height:200px;object-fit:cover;border-radius:8px 8px 0 0;margin:-14px -14px 10px -14px;display:block;" onerror="this.style.display='none'">`:''}
       <div class="movie-type">${m.type}</div>
       <div class="movie-title">${m.name}</div>
       <div class="movie-rating">${[1,2,3,4,5].map(i=>`<span class="${i<=m.rating?'on':''}">★</span>`).join('')}</div>
@@ -2112,6 +2114,7 @@ function openMovieEdit(id){
   document.getElementById('movie-year').value=m.year||'';
   document.getElementById('movie-status').value=m.status;
   document.getElementById('movie-notes').value=m.notes||'';
+  document.getElementById('movie-img').value=m.img||'';
   movieStarSelected=m.rating||0;
   document.querySelectorAll('#movie-stars-input span').forEach((s,i)=>s.classList.toggle('on',i<movieStarSelected));
   openModal('modal-movie');
@@ -2120,13 +2123,13 @@ function saveMovie(){
   const name=document.getElementById('movie-title').value.trim();
   if(!name){toast('Enter a title.');return;}
   const editId=document.getElementById('movie-edit-id').value;
-  const data={name,type:document.getElementById('movie-type').value,year:document.getElementById('movie-year').value,status:document.getElementById('movie-status').value,rating:movieStarSelected,notes:document.getElementById('movie-notes').value.trim()};
+const data={name,type:document.getElementById('movie-type').value,year:document.getElementById('movie-year').value,status:document.getElementById('movie-status').value,rating:movieStarSelected,notes:document.getElementById('movie-notes').value.trim(),img:document.getElementById('movie-img').value.trim()};
   if(editId){const m=db.movies.find(x=>x.id===editId);if(m)Object.assign(m,data);}
   else db.movies.push({id:uid(),...data});
   saveDB();closeModal('modal-movie');
   document.getElementById('movie-edit-id').value='';document.getElementById('movie-modal-title').textContent='Add Movie / Series';
   document.getElementById('movie-title').value='';document.getElementById('movie-notes').value='';
-  movieStarSelected=0;document.querySelectorAll('#movie-stars-input span').forEach(s=>s.classList.remove('on'));
+  movieStarSelected=0;document.querySelectorAll('#movie-stars-input span').forEach(s=>s.classList.remove('on'));document.getElementById('movie-img').value='';
   renderMovies();toast('Saved!');
 }
 
