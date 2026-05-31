@@ -1811,7 +1811,7 @@ function saveWallet(){
 }
 function renderBudget(){
   currentPage='budget';renderWalletCards();
-  const total=Object.values(db.wallets).reduce((s,v)=>s+(parseFloat(v?.actual)||0),0);
+  const total=Object.values(db.wallets).reduce((s,v)=>s+(parseFloat(v?.stated)||0),0);
   const pendingNeeds=db.needs.filter(n=>!n.done).reduce((s,n)=>s+(parseFloat(n.cost)||0),0);
   const duesTotal=db.dues.filter(d=>!d.paid).reduce((s,d)=>s+(parseFloat(d.amount)||0),0);
   document.getElementById('b-total').textContent='₱'+total.toLocaleString();
