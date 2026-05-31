@@ -286,7 +286,7 @@ label { font-size:11px; color:var(--text2); display:block; margin-bottom:5px; fo
 .habit-item:hover { border-color:var(--border2); }
 .habit-name { font-size:14px; font-weight:600; margin-bottom:2px; }
 .habit-streak { font-size:11px; color:var(--gold); font-weight:700; }
-.habit-dots { display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; }
+.habit-dots { display:flex; flex-wrap:wrap; gap:4px; margin-top:10px; }
 .habit-dot {
   width:26px; height:26px; border-radius:6px; border:1px solid var(--border2);
   background:var(--surface2); cursor:pointer; display:flex; align-items:center;
@@ -550,9 +550,7 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
     <div class="nav-item" onclick="navigate('recipes')" title="Recipes">
       <span class="nav-icon">✦</span><span class="nav-label">Recipes</span>
     </div>
-    <div class="nav-item" onclick="navigate('highlight')" title="Highlights">
-      <span class="nav-icon">✧</span><span class="nav-label">Moments</span>
-    </div>
+    
     <div class="nav-item" onclick="navigate('todo')" title="Daily Plans">
       <span class="nav-icon">▷</span><span class="nav-label">Plans</span>
     </div>
@@ -576,9 +574,7 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
 <div class="nav-item" onclick="navigate('analytics')" title="Expense Analytics">
   <span class="nav-icon">📊</span><span class="nav-label">Analytics</span>
 </div>
-<div class="nav-item" onclick="navigate('steps')" title="Step Counter">
-  <span class="nav-icon">👟</span><span class="nav-label">Steps</span>
-</div>
+
   </nav>
   <div class="sidebar-bottom">
     <button class="btn-backup-sm" onclick="backupData()" title="Backup">↓</button>
@@ -630,7 +626,14 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
       <div class="card" style="margin-bottom:18px;">
         <div class="section-title">Total Balance</div>
         <div style="display:flex;gap:24px;flex-wrap:wrap;">
-          <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Combined</div><div class="stat-value" style="color:var(--accent2);" id="b-total">₱0</div></div>
+          <div>
+  <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Stated Total</div>
+  <div class="stat-value" style="color:var(--accent2);" id="b-total">₱0</div>
+</div>
+<div>
+  <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Actual Total 🔒</div>
+  <div class="stat-value" style="color:var(--green);" id="b-actual-total">₱0</div>
+</div>
           <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Needs (pending)</div><div class="stat-value" style="color:var(--accent2);font-size:22px;" id="b-needs">₱0</div></div>
           <div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Monthly Dues</div><div class="stat-value" style="color:var(--blue);font-size:22px;" id="b-dues">₱0</div></div>
         </div>
@@ -649,7 +652,15 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
         </div>
         <div id="dues-list"></div>
       </div>
-    </div>
+      <div class="card" style="margin-top:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div class="section-title" style="margin-bottom:0;">Activity Log</div>
+          <button class="btn btn-danger btn-sm" onclick="clearBudgetLog()">Clear</button>
+        </div>
+        <div id="budget-log-list" style="max-height:300px;overflow-y:auto;"></div>
+      </div>
+
+    </div><!-- end page-budget -->
 
     <!-- WEIGHT -->
     <div class="page" id="page-weight">
@@ -698,13 +709,8 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
       <div id="recipes-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;"></div>
     </div>
 
-    <!-- HIGHLIGHT -->
-    <div class="page" id="page-highlight">
-      <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
-        <button class="btn btn-primary" onclick="openAddHighlight()">+ Add Highlight</button>
-      </div>
-      <div id="highlights-list"></div>
-    </div>
+    
+ 
 
     <!-- TODO -->
 <div class="page" id="page-todo">
@@ -733,10 +739,10 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
     <div class="page" id="page-productivity">
       <div class="prod-tabs" id="prod-tabs">
         <div class="prod-tab active" onclick="switchProdTab('habits')">🔥 Habits</div>
-        <div class="prod-tab" onclick="switchProdTab('goals')">🎯 Goals</div>
+   
         <div class="prod-tab" onclick="switchProdTab('pomodoro')">⏱ Pomodoro</div>
         <div class="prod-tab" onclick="switchProdTab('journal')">📓 Journal</div>
-        <div class="prod-tab" onclick="switchProdTab('vision')">✨ Vision</div>
+    
       </div>
 
       <!-- HABITS -->
@@ -748,14 +754,7 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
         <div id="habits-list"></div>
       </div>
 
-      <!-- GOALS -->
-      <div class="prod-tab-content" id="tab-goals">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-          <div id="goals-summary" style="font-size:13px;color:var(--text2);"></div>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-goal')">+ Add Goal</button>
-        </div>
-        <div id="goals-list"></div>
-      </div>
+      
 
       <!-- POMODORO -->
       <div class="prod-tab-content" id="tab-pomodoro">
@@ -863,15 +862,7 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
   <div id="journal-list"></div>
 </div>
 
-      <!-- VISION BOARD -->
-      <div class="prod-tab-content" id="tab-vision">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-          <div class="vision-cat-tabs" id="vision-filter-tabs"></div>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-vision')">+ Add Vision</button>
-        </div>
-        <div class="vision-grid" id="vision-list"></div>
-      </div>
-
+      
     </div><!-- end productivity page -->
 <!-- PERIOD TRACKER -->
 <div class="page" id="page-period">
@@ -1098,7 +1089,13 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
     </div>
     <div class="card">
       <div class="section-title">Log Sleep</div>
-      <div class="form-group"><label>Date (night of)</label><input type="date" id="sleep-date"></div>
+      <div class="form-group"><label>Type</label>
+  <select id="sleep-type">
+    <option value="night">🌙 Night Sleep</option>
+    <option value="nap">😴 Nap</option>
+  </select>
+</div>
+<div class="form-group"><label>Date</label><input type="date" id="sleep-date"></div>
       <div class="form-row">
         <div class="form-group"><label>Bedtime</label><input type="time" id="sleep-bedtime" value="22:00"></div>
         <div class="form-group"><label>Wake time</label><input type="time" id="sleep-waketime" value="06:00"></div>
@@ -1139,56 +1136,7 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
     <div id="sleep-history-list" style="max-height:360px;overflow-y:auto;"></div>
   </div>
 </div>
-<!-- STEP COUNTER -->
-<div class="page" id="page-steps">
-  <div class="grid-2" style="margin-bottom:18px;">
-    <div class="card" style="text-align:center;">
-      <div class="section-title">Today's Steps</div>
-      <div style="margin:16px 0;">
-        <div style="font-family:'Rajdhani',sans-serif;font-size:56px;font-weight:700;color:var(--accent2);line-height:1;" id="steps-today-display">0</div>
-        <div style="font-size:12px;color:var(--text3);margin-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;" id="steps-today-sub">of 10,000 goal</div>
-      </div>
-      <div class="progress-bar" style="height:10px;margin:0 0 16px;">
-        <div class="progress-fill" id="steps-today-bar" style="width:0%;"></div>
-      </div>
-      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-        <button class="btn btn-sm" onclick="quickAddSteps(500)">+ 500</button>
-        <button class="btn btn-sm" onclick="quickAddSteps(1000)">+ 1,000</button>
-        <button class="btn btn-sm btn-primary" onclick="quickAddSteps(2000)">+ 2,000</button>
-        <button class="btn btn-sm btn-danger" onclick="undoSteps()">↩ Undo</button>
-      </div>
-    </div>
-    <div>
-      <div class="card" style="margin-bottom:14px;">
-        <div class="section-title">Log Steps</div>
-        <div class="form-group"><label>Date</label><input type="date" id="steps-date"></div>
-        <div class="form-group"><label>Steps</label><input type="number" id="steps-input" placeholder="e.g. 8000" min="0"></div>
-        <div class="form-group"><label>Note (optional)</label><input type="text" id="steps-note" placeholder="Morning walk, gym, etc."></div>
-        <button class="btn btn-primary" onclick="logSteps()">Log Steps</button>
-      </div>
-      <div class="card">
-        <div class="section-title">Daily Goal</div>
-        <div class="form-group"><label>Step Goal</label><input type="number" id="steps-goal-input" placeholder="e.g. 10000" value="10000" step="500"></div>
-        <button class="btn btn-primary" onclick="saveStepsGoal()">Save Goal</button>
-      </div>
-    </div>
-  </div>
 
-  <div class="grid-3" style="margin-bottom:18px;" id="steps-stats"></div>
-
-  <div class="card" style="margin-bottom:14px;">
-    <div class="section-title">7-Day History</div>
-    <div id="steps-week-chart"></div>
-  </div>
-
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-      <div class="section-title" style="margin-bottom:0;">Log History</div>
-      <button class="btn btn-danger btn-sm" onclick="clearStepsLog()">Clear All</button>
-    </div>
-    <div id="steps-history-list" style="max-height:320px;overflow-y:auto;"></div>
-  </div>
-</div>
 <!-- STUDENT HUB -->
 <div class="page" id="page-student">
   <div class="prod-tabs" id="student-tabs">
@@ -1299,15 +1247,26 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
   <div class="modal">
     <div class="modal-title" id="wallet-modal-title">Update Balance</div>
     <input type="hidden" id="wallet-edit-key">
+
     <div class="form-group">
-      <label id="wallet-modal-label">What you tell others (₱)</label>
+      <label>What you tell others (₱) — stated</label>
       <input type="number" id="wallet-stated-input" placeholder="e.g. 1,000">
-      <div style="font-size:11px;color:var(--text3);margin-top:5px;">The amount you usually say when asked.</div>
     </div>
-    <div class="form-group">
-      <label>Actual balance (₱)</label>
-      <input type="number" id="wallet-actual-input" placeholder="e.g. 500">
-      <div style="font-size:11px;color:var(--text3);margin-top:5px;">The real balance right now. Only you can see this.</div>
+    <div style="border-top:1px solid var(--border);margin:14px 0;padding-top:14px;">
+      <div style="font-size:12px;color:var(--text2);font-weight:700;margin-bottom:10px;">➕ Add / Deduct Amount</div>
+      <div class="form-group"><label>Transaction Type</label>
+        <select id="wallet-txn-type">
+          <option value="add">Add (income / received)</option>
+          <option value="deduct">Deduct (spent / sent)</option>
+          <option value="set">Set exact amount</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Amount (₱)</label>
+        <input type="number" id="wallet-txn-amount" placeholder="e.g. 500">
+      </div>
+      <div class="form-group"><label>Source / Note</label>
+        <input type="text" id="wallet-txn-source" placeholder="e.g. Salary, GCash transfer, Groceries...">
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('modal-wallet')">Cancel</button>
@@ -1409,24 +1368,6 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
   </div>
 </div>
 
-<!-- Highlight Modal -->
-<div class="modal-overlay" id="modal-highlight">
-  <div class="modal">
-    <div class="modal-title">Add Highlight</div>
-    <input type="hidden" id="hl-edit-id">
-    <div class="form-group"><label>Date</label><input type="date" id="hl-date"></div>
-    <div class="form-group"><label>Highlight of the day</label><textarea id="hl-text" rows="4" placeholder="What made today special?"></textarea></div>
-    <div class="form-group">
-      <label>Photo (optional)</label>
-      <input type="file" id="hl-photo" accept="image/*" onchange="previewHlPhoto(event)">
-      <img id="hl-photo-preview" style="display:none;margin-top:8px;max-height:160px;border-radius:8px;object-fit:cover;width:100%;">
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('modal-highlight')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveHighlight()">Save</button>
-    </div>
-  </div>
-</div>
 
 <!-- Todo Modal -->
 <div class="modal-overlay" id="modal-todo">
@@ -1467,7 +1408,7 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
         </select>
       </div>
     </div>
-    <div class="form-group"><label>Target (days to track)</label><input type="number" id="habit-target-input" value="30" min="7" max="365"></div>
+   
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('modal-habit')">Cancel</button>
       <button class="btn btn-primary" onclick="saveHabit()">Save</button>
@@ -1475,72 +1416,7 @@ body.light .sleep-quality-star.on { filter:drop-shadow(0 0 4px rgba(212,144,10,0
   </div>
 </div>
 
-<!-- Goal Modal -->
-<div class="modal-overlay" id="modal-goal">
-  <div class="modal">
-    <div class="modal-title" id="goal-modal-title">Add Goal</div>
-    <input type="hidden" id="goal-edit-id">
-    <div class="form-group"><label>Goal Title</label><input type="text" id="goal-title-input" placeholder="e.g. Save ₱20,000, Lose 10kg..."></div>
-    <div class="form-row">
-      <div class="form-group"><label>Category</label>
-        <select id="goal-cat-input">
-          <option value="health">Health</option><option value="finance">Finance</option>
-          <option value="personal">Personal</option><option value="career">Career</option><option value="other">Other</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Unit</label><input type="text" id="goal-unit-input" placeholder="e.g. kg, ₱, pages, km"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Start Value</label><input type="number" id="goal-start-input" placeholder="0" step="any"></div>
-      <div class="form-group"><label>Target Value</label><input type="number" id="goal-target-input" placeholder="e.g. 20000" step="any"></div>
-    </div>
-    <div class="form-group"><label>Current Value</label><input type="number" id="goal-current-input" placeholder="Where are you now?" step="any"></div>
-    <div class="form-group"><label>Target Date (optional)</label><input type="date" id="goal-date-input"></div>
-    <div class="form-group"><label>Milestones (optional, comma-separated)</label><input type="text" id="goal-milestones-input" placeholder="e.g. 5000, 10000, 15000"></div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('modal-goal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveGoal()">Save</button>
-    </div>
-  </div>
-</div>
 
-<!-- Update Goal Progress Modal -->
-<div class="modal-overlay" id="modal-goal-update">
-  <div class="modal" style="width:380px;">
-    <div class="modal-title" id="goal-update-title">Update Progress</div>
-    <input type="hidden" id="goal-update-id">
-    <div class="form-group"><label id="goal-update-label">Current Value</label><input type="number" id="goal-update-value" step="any" placeholder="Enter current value"></div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('modal-goal-update')">Cancel</button>
-      <button class="btn btn-primary" onclick="updateGoalProgress()">Update</button>
-    </div>
-  </div>
-</div>
-
-<!-- Vision Modal -->
-<div class="modal-overlay" id="modal-vision">
-  <div class="modal">
-    <div class="modal-title">Add Vision</div>
-    <input type="hidden" id="vision-edit-id">
-    <div class="form-group"><label>Title / Dream</label><input type="text" id="vision-title-input" placeholder="What do you dream of?"></div>
-    <div class="form-row">
-      <div class="form-group"><label>Category</label>
-        <select id="vision-cat-input">
-          <option value="Career">Career</option><option value="Travel">Travel</option>
-          <option value="Health">Health</option><option value="Finance">Finance</option>
-          <option value="Family">Family</option><option value="Personal">Personal</option><option value="Other">Other</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Emoji Icon</label><input type="text" id="vision-emoji-input" placeholder="e.g. 🏠 🌏 💪" maxlength="4"></div>
-    </div>
-    <div class="form-group"><label>Image URL (optional)</label><input type="url" id="vision-img-input" placeholder="https://... (or paste an image URL)"></div>
-    <div class="form-group"><label>Description / Affirmation</label><textarea id="vision-note-input" rows="3" placeholder="Why does this matter to you? Describe it vividly..."></textarea></div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('modal-vision')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveVision()">Save</button>
-    </div>
-  </div>
-</div>
 <!-- Period Log View Modal -->
 <div class="modal-overlay" id="modal-period-log">
   <div class="modal" style="width:400px;">
@@ -1746,13 +1622,13 @@ function loadTheme(){
 }
 
 // ===== NAV =====
-const pageTitles={overview:'OVERVIEW',budget:'BUDGET',weight:'WEIGHT TRACKER',movies:'MOVIES & SERIES',recipes:'RECIPES',highlight:'HIGHLIGHTS',todo:'DAILY PLANS',productivity:'PRODUCTIVITY',period:'PERIOD TRACKER',analytics:'EXPENSE ANALYTICS',water:'WATER TRACKER',sleep:'SLEEP TRACKER',steps:'STEP COUNTER',student:'STUDENT HUB'};
+const pageTitles={overview:'OVERVIEW',budget:'BUDGET',weight:'WEIGHT TRACKER',movies:'MOVIES & SERIES',recipes:'RECIPES',todo:'DAILY PLANS',productivity:'PRODUCTIVITY',period:'PERIOD TRACKER',analytics:'EXPENSE ANALYTICS',water:'WATER TRACKER',sleep:'SLEEP TRACKER',student:'STUDENT HUB'};
 let currentPage='overview';
 function navigate(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
-const labels=['overview','budget','weight','movies','recipes','highlight','todo','productivity','student','period','water','sleep','analytics','steps'];
+const labels=['overview','budget','weight','movies','recipes','todo','productivity','student','period','water','sleep','analytics'];
   const items=document.querySelectorAll('.nav-item');
   const idx=labels.indexOf(page);
   if(idx>=0) items[idx].classList.add('active');
@@ -1775,7 +1651,7 @@ function initDate(){
   document.getElementById('overview-date').textContent=dateStr;
   const today=now.toISOString().slice(0,10);
   document.getElementById('w-date').value=today;
-  document.getElementById('hl-date').value=today;
+
   document.getElementById('todo-view-date').value=today;
   document.getElementById('todo-date-input').value=today;
   document.getElementById('journal-date').value=today;
@@ -1911,16 +1787,27 @@ function openWalletEdit(key){
   document.getElementById('wallet-modal-title').textContent='Update '+meta.label;
   document.getElementById('wallet-edit-key').value=key;
   document.getElementById('wallet-stated-input').value=w.stated||'';
-  document.getElementById('wallet-actual-input').value=w.actual||'';
+ 
   openModal('modal-wallet');
 }
 function saveWallet(){
   const key=document.getElementById('wallet-edit-key').value;
   const stated=parseFloat(document.getElementById('wallet-stated-input').value);
-  const actual=parseFloat(document.getElementById('wallet-actual-input').value);
-  if(isNaN(stated)&&isNaN(actual)){toast('Enter at least one amount.');return;}
-  db.wallets[key]={stated:isNaN(stated)?(db.wallets[key]?.stated||0):stated,actual:isNaN(actual)?(db.wallets[key]?.actual||0):actual};
-  saveDB();closeModal('modal-wallet');renderBudget();toast('Balance updated!');
+  const txnType=document.getElementById('wallet-txn-type').value;
+  const txnAmt=parseFloat(document.getElementById('wallet-txn-amount').value);
+  const source=document.getElementById('wallet-txn-source').value.trim();
+  const w=db.wallets[key];
+  if(!isNaN(stated)) w.stated=stated;
+  if(!isNaN(txnAmt)&&txnAmt>0){
+    const before=w.actual||0;
+    if(txnType==='add') w.actual=(before+txnAmt);
+    else if(txnType==='deduct') w.actual=Math.max(0,before-txnAmt);
+    else w.actual=txnAmt;
+    if(!db.budgetLog) db.budgetLog=[];
+    db.budgetLog.unshift({id:uid(),date:new Date().toISOString().slice(0,10),wallet:key,type:txnType,amount:txnAmt,source,before,after:w.actual});
+    if(db.budgetLog.length>200) db.budgetLog=db.budgetLog.slice(0,200);
+  }
+  saveDB();closeModal('modal-wallet');renderBudget();toast('Updated!');
 }
 function renderBudget(){
   currentPage='budget';renderWalletCards();
@@ -1928,6 +1815,8 @@ function renderBudget(){
   const pendingNeeds=db.needs.filter(n=>!n.done).reduce((s,n)=>s+(parseFloat(n.cost)||0),0);
   const duesTotal=db.dues.filter(d=>!d.paid).reduce((s,d)=>s+(parseFloat(d.amount)||0),0);
   document.getElementById('b-total').textContent='₱'+total.toLocaleString();
+  const actualTotal=Object.values(db.wallets).reduce((s,v)=>s+(parseFloat(v?.actual)||0),0);
+document.getElementById('b-actual-total').textContent='₱'+actualTotal.toLocaleString();
   document.getElementById('b-needs').textContent='₱'+pendingNeeds.toLocaleString();
   document.getElementById('b-dues').textContent='₱'+duesTotal.toLocaleString();
   const pBadge={high:'badge-red',medium:'badge-gold',low:''};
@@ -1949,7 +1838,27 @@ function renderBudget(){
       <div class="list-item-sub">₱${(parseFloat(d.amount)||0).toLocaleString()}/month${d.day?' · Due on '+d.day:''}</div></div>
       <div class="list-actions"><button class="btn btn-sm btn-icon" onclick="openDueEdit('${d.id}')">✎</button><button class="btn btn-sm btn-icon btn-danger" onclick="deleteDue('${d.id}')">×</button></div>
     </div>`).join('');}
+
+    renderBudgetLog();
 }
+
+function renderBudgetLog(){
+  if(!db.budgetLog) db.budgetLog=[];
+  const el=document.getElementById('budget-log-list');
+  if(db.budgetLog.length===0){el.innerHTML=`<div style="color:var(--text3);font-size:13px;padding:8px 0;">No transactions yet.</div>`;return;}
+  const wMeta={cash:'💵 Cash',debit:'💳 Debit',metrobank:'🏦 Metrobank',gcash:'📱 GCash'};
+  el.innerHTML=db.budgetLog.map(l=>`
+    <div class="list-item">
+      <div style="font-size:18px;">${l.type==='add'?'➕':l.type==='deduct'?'➖':'✏️'}</div>
+      <div class="list-item-main">
+        <div class="list-item-title" style="color:${l.type==='add'?'var(--green)':l.type==='deduct'?'var(--accent2)':'var(--text)'};">
+          ${l.type==='add'?'+':''}${l.type==='deduct'?'-':''}₱${l.amount.toLocaleString()} — ${wMeta[l.wallet]||l.wallet}
+        </div>
+        <div class="list-item-sub">${l.date}${l.source?' · '+l.source:''} · ₱${l.before.toLocaleString()} → ₱${l.after.toLocaleString()}</div>
+      </div>
+    </div>`).join('');
+}
+function clearBudgetLog(){db.budgetLog=[];saveDB();renderBudgetLog();toast('Log cleared.');}
 function saveNeed(){
   const name=document.getElementById('need-name').value.trim();
   const cost=parseFloat(document.getElementById('need-cost').value)||0;
@@ -2301,17 +2210,17 @@ let activeProdTab='habits';
 function switchProdTab(tab){
   activeProdTab=tab;
   document.querySelectorAll('.prod-tab').forEach((el,i)=>{
-    const tabs=['habits','goals','pomodoro','journal','vision'];
+    const tabs=['habits','pomodoro','journal'];
     el.classList.toggle('active',tabs[i]===tab);
   });
   document.querySelectorAll('.prod-tab-content').forEach(el=>el.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
-  const tabRenders={habits:renderHabits,goals:renderGoals,pomodoro:renderPomodoro,journal:renderJournal,vision:renderVision};
+  const tabRenders={habits:renderHabits,pomodoro:renderPomodoro,journal:renderJournal};
   tabRenders[tab]&&tabRenders[tab]();
 }
 function renderProductivity(){
   currentPage='productivity';
-  const tabRenders={habits:renderHabits,goals:renderGoals,pomodoro:renderPomodoro,journal:renderJournal,vision:renderVision};
+  const tabRenders={habits:renderHabits,pomodoro:renderPomodoro,journal:renderJournal};
   tabRenders[activeProdTab]&&tabRenders[activeProdTab]();
 }
 
@@ -2326,7 +2235,7 @@ function saveHabit(){
     name,
     category:document.getElementById('habit-cat-input').value,
     color:document.getElementById('habit-color-input').value,
-    target:parseInt(document.getElementById('habit-target-input').value)||30
+     target:30
   };
   if(editId){const h=db.habits.find(x=>x.id===editId);if(h)Object.assign(h,data);}
   else db.habits.push({id:uid(),...data,checks:{},startDate:new Date().toISOString().slice(0,10)});
@@ -2356,8 +2265,14 @@ function getHabitStreak(h){
 function renderHabits(){
   const todayStr=new Date().toISOString().slice(0,10);
   // Build last 21 days
+  const now=new Date();
+  const year=now.getFullYear(),month=now.getMonth();
+  const daysInMonth=new Date(year,month+1,0).getDate();
   const days=[];
-  for(let i=20;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    days.push(ds);
+  }
   const completed=db.habits.filter(h=>h.checks&&h.checks[todayStr]).length;
   document.getElementById('habit-summary-bar').innerHTML=`<span style="font-weight:700;color:var(--text);">${completed}/${db.habits.length}</span> habits completed today`;
   const list=document.getElementById('habits-list');
@@ -2376,7 +2291,8 @@ function renderHabits(){
       const done=!!checks[ds];
       const isToday=ds===todayStr;
       const dotIdx = 21 - days.length + days.indexOf(ds);
-const dotLabel = dotIdx + 1;
+const dotLabel = new Date(ds+'T12:00:00').getDate();
+
 return `<div class="habit-dot ${done?'done color-'+h.color:''}" onclick="toggleHabitDay('${h.id}','${ds}')" title="${ds}" style="${isToday?'border-width:2px;border-color:var(--border2);':''}"><span style="font-size:9px;font-weight:${isToday?'700':'400'};">${dotLabel}</span></div>`;
     }).join('');
     return `<div class="habit-item color-${h.color}">
@@ -3474,7 +3390,8 @@ function saveSleepLog() {
   const hours = calcSleepHours(bedtime, waketime);
   const notes = document.getElementById('sleep-notes').value.trim();
   const existing = db.sleep.logs.findIndex(l => l.date === date);
-  const entry = { date, bedtime, waketime, hours, quality: sleepQualitySelected, notes };
+  const type = document.getElementById('sleep-type').value;
+  const entry = { date, bedtime, waketime, hours, quality: sleepQualitySelected, notes, type: type||'night' };
   if(existing >= 0) db.sleep.logs[existing] = entry;
   else db.sleep.logs.push(entry);
   db.sleep.logs.sort((a,b) => b.date.localeCompare(a.date));
@@ -3507,7 +3424,7 @@ function renderSleep() {
   document.getElementById('sleep-ideal-bed').value = db.sleep.idealBed || '22:00';
 
   const goalHrs = db.sleep.goalHrs || 8;
-  const latest = db.sleep.logs[0];
+  const latest = db.sleep.logs.find(l => l.type !== 'nap');
 
   // arc for last night
   if(latest) {
@@ -3586,12 +3503,13 @@ function renderSleep() {
     histEl.innerHTML = db.sleep.logs.map(l => {
       const sl = getSleepLabel(l.hours);
       return `<div class="sleep-log-item">
-        <div style="font-size:24px;">🌙</div>
+            <div style="font-size:24px;">${l.type==='nap'?'😴':'🌙'}</div>
         <div style="flex:1;">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
             <span style="font-weight:700;font-size:13px;">${l.date}</span>
             <span style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:${sl.color};">${Math.floor(l.hours)}h ${Math.round((l.hours%1)*60)}m</span>
             <span class="badge" style="background:${sl.color}22;color:${sl.color};border:1px solid ${sl.color}44;font-size:9px;">${sl.label}</span>
+            ${l.type==='nap'?`<span class="badge badge-purple" style="font-size:9px;">Nap</span>`:''}
             ${l.quality ? `<span style="font-size:12px;">${'⭐'.repeat(l.quality)}</span>` : ''}
           </div>
           <div style="font-size:11px;color:var(--text3);margin-top:2px;">🛏 ${l.bedtime} → ⏰ ${l.waketime}${l.notes?' · '+l.notes:''}</div>
@@ -4302,9 +4220,9 @@ function renderNotes() {
 
 const renders={
   overview:renderOverview,budget:renderBudget,weight:renderWeight,
-  movies:renderMovies,recipes:renderRecipes,highlight:renderHighlights,
+  movies:renderMovies,recipes:renderRecipes,
   todo:renderTodos,productivity:renderProductivity,period:renderPeriod,
-  analytics:renderAnalytics,water:renderWater,sleep:renderSleep,steps:renderSteps,student:renderStudent
+  analytics:renderAnalytics,water:renderWater,sleep:renderSleep,student:renderStudent
 };
 
 
